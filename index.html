@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TryOn Studio — AI Virtual Try-On for Clothing Brands</title>
+  <meta name="description" content="See it on you before you buy it. AI-powered virtual try-on demo for clothing brands." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="wrap nav-inner">
+      <a class="logo" href="index.html">TryOn<span>Studio</span></a>
+      <div class="nav-links">
+        <a href="#how">How it works</a>
+        <a href="#catalog">Catalog</a>
+        <a href="#brands">For brands</a>
+        <a class="btn btn-sm" href="studio.html">Try the demo</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="eyebrow">AI Virtual Try-On</span>
+        <h1>See it on <em>you</em><br />before you buy it.</h1>
+        <p class="lead">
+          Pick any garment, upload your photo, and watch AI dress you in it —
+          realistic fit, fabric and shadows, in seconds. This is the future of
+          online clothing retail.
+        </p>
+        <div class="hero-cta">
+          <a class="btn btn-accent" href="studio.html">Try the live demo</a>
+          <a class="btn btn-ghost" href="#catalog">Browse catalog</a>
+        </div>
+        <div class="trust-row">
+          <div><strong>~15s</strong>per try-on</div>
+          <div><strong>6</strong>garments in demo</div>
+          <div><strong>0</strong>sign-up needed</div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <span class="badge-ai">AI-generated sample result</span>
+        <img class="main" src="assets/sample-tryon-result.jpg" alt="AI virtual try-on sample — model wearing a brown leather jacket" />
+      </div>
+    </div>
+  </header>
+
+  <section class="section alt" id="how">
+    <div class="wrap">
+      <div class="center">
+        <h2>How it works</h2>
+        <p class="sub">Three steps. No app install, no webcam calibration — just a photo and AI.</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="num">1</div>
+          <h3>Pick a garment</h3>
+          <p>Choose from the demo catalog — shirts, tees, jackets, hoodies and denim.</p>
+        </div>
+        <div class="step">
+          <div class="num">2</div>
+          <h3>Upload your photo</h3>
+          <p>A clear, front-facing, full-body photo works best. It never leaves your browser except to the AI.</p>
+        </div>
+        <div class="step">
+          <div class="num">3</div>
+          <h3>AI dresses you</h3>
+          <p>A generative image model fits the garment onto your body — drape, folds, lighting and all.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="catalog">
+    <div class="wrap">
+      <div class="center">
+        <h2>Demo catalog</h2>
+        <p class="sub">Tap any garment to open the studio with it pre-selected.</p>
+      </div>
+      <div class="catalog-grid" id="catalogGrid"></div>
+    </div>
+  </section>
+
+  <section class="section alt" id="brands">
+    <div class="wrap brand-grid">
+      <div>
+        <img src="assets/garment-brown-leather-jacket.jpg" alt="Brown leather jacket product photo" />
+      </div>
+      <div>
+        <span class="eyebrow">For clothing brands</span>
+        <h2>Put a fitting room<br />inside your store.</h2>
+        <p class="sub" style="margin-bottom:0">
+          The same technology in this demo plugs into Shopify, WooCommerce or any
+          custom storefront as a "Try it on" button on your product pages.
+        </p>
+        <ul class="perks">
+          <li>
+            <span class="tick">✓</span>
+            <div><strong>Fewer returns</strong><span>Shoppers who see the fit buy with confidence.</span></div>
+          </li>
+          <li>
+            <span class="tick">✓</span>
+            <div><strong>Higher conversion</strong><span>Interactive product pages keep people engaged longer.</span></div>
+          </li>
+          <li>
+            <span class="tick">✓</span>
+            <div><strong>Works with your catalog</strong><span>Just product photos — no 3D modelling needed.</span></div>
+          </li>
+        </ul>
+        <a class="btn" href="studio.html">See it in action</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap foot">
+      <a class="logo" href="index.html" style="font-size:1.1rem">TryOn<span>Studio</span></a>
+      <p>Demo project — try-on images are AI-generated and for illustration only.</p>
+    </div>
+  </footer>
+
+  <script src="assets/garments.js"></script>
+  <script>
+    // Render the catalog grid from the shared garment list
+    const grid = document.getElementById("catalogGrid");
+    window.GARMENTS.forEach((g) => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <div class="thumb"><img src="${g.img}" alt="${g.name}" loading="lazy" /></div>
+        <div class="card-body">
+          <div class="cat">${g.category}</div>
+          <h3>${g.name}</h3>
+          <div class="price">${g.price}</div>
+          <a class="btn btn-sm btn-accent" href="studio.html?g=${g.id}">Try it on</a>
+        </div>`;
+      grid.appendChild(card);
+    });
+  </script>
+</body>
+</html>

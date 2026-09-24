@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Try-On Studio — Virtual Try-On Demo</title>
+  <meta name="description" content="Upload your photo, pick a garment, and let AI show you wearing it." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="wrap nav-inner">
+      <a class="logo" href="index.html">TryOn<span>Studio</span></a>
+      <div class="nav-links">
+        <a href="index.html#how">How it works</a>
+        <a href="index.html#catalog">Catalog</a>
+        <a class="btn btn-sm" href="index.html">← Home</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="wrap">
+    <div class="studio-head">
+      <h1>The Try-On Studio</h1>
+      <p>Choose a garment and see it on our model <strong>instantly</strong> — no key, no upload needed. Or switch to <strong>Live AI</strong> to try it on your own photo with a free Gemini API key.</p>
+      <span class="key-note">⚡ Instant demo works out of the box. Live AI needs a Gemini API key with image quota (step 3).</span>
+    </div>
+
+    <div class="studio-grid">
+      <!-- Controls -->
+      <div>
+        <div class="panel">
+          <h2>1 · Choose a garment</h2>
+          <p class="hint">Tap one to select it.</p>
+          <div class="pick-grid" id="pickGrid"></div>
+        </div>
+
+        <div class="panel" id="photoPanel">
+          <h2>2 · Upload your photo <span class="mode-tag">Live AI only</span></h2>
+          <p class="hint">Front-facing, standing, good light. JPG or PNG.</p>
+          <label class="upload-zone" id="uploadZone">
+            <input type="file" id="photoInput" accept="image/*" />
+            <div class="big">📷</div>
+            <p><strong>Click to upload</strong> or drag &amp; drop your photo here</p>
+          </label>
+          <div class="photo-preview" id="photoPreview">
+            <img id="photoImg" alt="Your uploaded photo" />
+            <button id="removePhoto" type="button">Remove photo ✕</button>
+          </div>
+        </div>
+
+        <div class="panel" id="keyPanel">
+          <h2>3 · Your Gemini API key <span class="mode-tag">Live AI only</span></h2>
+          <p class="hint">
+            Free from <a class="small-link" href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Google AI Studio</a>.
+            Saved only in this browser — never on any server.
+          </p>
+          <div class="key-row">
+            <input type="password" id="apiKey" placeholder="Paste your Gemini API key…" autocomplete="off" spellcheck="false" />
+            <button class="btn btn-sm" id="saveKey" type="button">Save</button>
+          </div>
+          <div class="key-saved" id="keySaved">✓ Key saved in this browser.</div>
+        </div>
+      </div>
+
+      <!-- Result -->
+      <div class="panel result-panel">
+        <h2>Your try-on</h2>
+        <div class="mode-toggle">
+          <button type="button" class="mode-pill active" id="modeDemo">⚡ Instant demo</button>
+          <button type="button" class="mode-pill" id="modeLive">🤖 Live AI</button>
+        </div>
+        <p class="hint" id="selectionHint">Select a garment and hit “Try it on”.</p>
+        <div class="result-stage" id="resultStage">
+          <div class="placeholder" id="resultPlaceholder">
+            <div class="big">👗</div>
+            <p>Your AI try-on will appear here.</p>
+          </div>
+        </div>
+        <div class="error-box" id="errorBox"></div>
+        <div class="result-actions">
+          <button class="btn btn-accent" id="generateBtn" type="button">✨ Try it on</button>
+        </div>
+        <div class="result-actions" id="afterActions" style="display:none">
+          <a class="btn" id="downloadBtn" download="tryon-result.jpg" href="#">⬇ Download</a>
+          <button class="btn btn-ghost" id="againBtn" type="button">Try another</button>
+        </div>
+        <div class="demo-note" id="demoNote">⚡ Instant demo shows a pre-generated preview on our model. Switch to Live AI to use your own photo.</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="wrap foot">
+      <a class="logo" href="index.html" style="font-size:1.1rem">TryOn<span>Studio</span></a>
+      <p>Demo project — try-on images are AI-generated and for illustration only.</p>
+    </div>
+  </footer>
+
+  <script src="assets/garments.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
