@@ -23,8 +23,8 @@
   <div class="wrap">
     <div class="studio-head">
       <h1>The Try-On Studio</h1>
-      <p>Choose a garment and see it on our model <strong>instantly</strong> — no key, no upload needed. Or switch to <strong>Live AI</strong> to try it on your own photo with a free Gemini API key.</p>
-      <span class="key-note">⚡ Instant demo works out of the box. Live AI needs a Gemini API key with image quota (step 3).</span>
+      <p>Choose a garment and see it on our model <strong>instantly</strong> — no key, no upload needed. <strong>Free AI</strong> generates it live with a free Pollinations key. <strong>Live AI</strong> tries it on your own photo with a Gemini API key.</p>
+      <span class="key-note">⚡ Instant demo works out of the box · 🆓 Free AI needs a free Pollinations key · 🤖 Live AI needs a Gemini key with image quota.</span>
     </div>
 
     <div class="studio-grid">
@@ -69,7 +69,16 @@
         <h2>Your try-on</h2>
         <div class="mode-toggle">
           <button type="button" class="mode-pill active" id="modeDemo">⚡ Instant demo</button>
+          <button type="button" class="mode-pill" id="modeFree">🆓 Free AI</button>
           <button type="button" class="mode-pill" id="modeLive">🤖 Live AI</button>
+        </div>
+        <div class="free-key-wrap" id="freeKeyWrap" style="display:none">
+          <p class="hint">Free key from <a class="small-link" href="https://enter.pollinations.ai/keys" target="_blank" rel="noopener">enter.pollinations.ai</a> — no card needed. Saved only in this browser.</p>
+          <div class="key-row">
+            <input type="password" id="freeKey" placeholder="Paste your Pollinations API key…" autocomplete="off" spellcheck="false" />
+            <button class="btn btn-sm" id="saveFreeKey" type="button">Save</button>
+          </div>
+          <div class="key-saved" id="freeKeySaved">✓ Key saved in this browser.</div>
         </div>
         <p class="hint" id="selectionHint">Select a garment and hit “Try it on”.</p>
         <div class="result-stage" id="resultStage">
@@ -86,7 +95,8 @@
           <a class="btn" id="downloadBtn" download="tryon-result.jpg" href="#">⬇ Download</a>
           <button class="btn btn-ghost" id="againBtn" type="button">Try another</button>
         </div>
-        <div class="demo-note" id="demoNote">⚡ Instant demo shows a pre-generated preview on our model. Switch to Live AI to use your own photo.</div>
+        <div class="demo-note" id="demoNote">⚡ Instant demo shows a pre-generated preview on our model. Try Free AI or Live AI for fresh generations.</div>
+        <div class="demo-note" id="freeNote" style="display:none">🆓 Free AI generates a fresh try-on on our model photo via Pollinations (free key above). Your own photo isn't used in this mode — switch to Live AI for that.</div>
       </div>
     </div>
   </div>

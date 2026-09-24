@@ -6,12 +6,17 @@
   "use strict";
 
   var KEY_STORAGE = "vto_gemini_key";
+  var FREE_KEY_STORAGE = "vto_pollinations_key";
   var MODEL = "gemini-3.1-flash-image";
   var MAX_DIM = 1024;
 
+  // Public base URL of this demo (Free AI needs publicly reachable image URLs).
+  var SITE_BASE = "https://akshayck-dev.github.io/virtual-tryon-demo/";
+  var MODEL_PHOTO = SITE_BASE + "assets/test-person-photo.jpg";
+
   var selectedGarment = null;
   var personDataUrl = null; // resized dataURL of the uploaded photo
-  var mode = "demo"; // "demo" = instant pre-generated preview, "live" = Gemini API
+  var mode = "demo"; // "demo" = pre-generated preview, "free" = Pollinations, "live" = Gemini API
 
   var $ = function (id) { return document.getElementById(id); };
 
@@ -86,6 +91,12 @@
       $("apiKey").value = saved;
       $("keySaved").classList.add("show");
     }
+    var freeSaved = "";
+    try { freeSaved = localStorage.getItem(FREE_KEY_STORAGE) || ""; } catch (e) {}
+    if (freeSaved) {
+      $("freeKey").value = freeSaved;
+      $("freeKeySaved").classList.add("show");
+    }
   }
 
   /* ---------- Mode toggle ---------- */
@@ -93,10 +104,14 @@
   function setMode(next) {
     mode = next;
     $("modeDemo").classList.toggle("active", mode === "demo");
+    $("modeFree").classList.toggle("active", mode === "free");
     $("modeLive").classList.toggle("active", mode === "live");
-    $("photoPanel").classList.toggle("dimmed", mode === "demo");
-    $("keyPanel").classList.toggle("dimmed", mode === "demo");
+    var needsUpload = (mode === "live");
+    $("photoPanel").classList.toggle("dimmed", !needsUpload);
+    $("keyPanel").classList.toggle("dimmed", !needsUpload);
+    $("freeKeyWrap").style.display = mode === "free" ? "" : "none";
     $("demoNote").style.display = mode === "demo" ? "" : "none";
+    $("freeNote").style.display = mode === "free" ? "" : "none";
     hideError();
     updateHint();
   }
@@ -108,6 +123,12 @@
       $("selectionHint").textContent = selectedGarment
         ? "Ready — " + selectedGarment.name + " selected. Hit “Try it on” for an instant preview."
         : "Select a garment and hit “Try it on”.";
+      return;
+    }
+    if (mode === "free") {
+      $("selectionHint").textContent = selectedGarment
+        ? "Ready — " + selectedGarment.name + " selected. Hit “Try it on” to generate it live (free AI)."
+        : "Select a garment, paste your free Pollinations key above, and hit “Try it on”.";
       return;
     }
     var parts = [];
@@ -188,6 +209,7 @@
     hideError();
     if (!selectedGarment) { showError("Pick a garment first (step 1)."); return; }
     if (mode === "demo") { generateDemo(); return; }
+    if (mode === "free") { generateFree(); return; }
     generateLive();
   }
 
@@ -215,6 +237,66 @@
       showError("Couldn't load the preview image. Check your connection and try again.");
     };
     img.src = selectedGarment.pregen;
+  }
+
+  // Free AI: live generation via Pollinations (free key), on our public model photo.
+  function generateFree() {
+    var key = $("freeKey").value.trim();
+    if (!key) { showError("Paste your free Pollinations API key above — get one at enter.pollinations.ai (no card needed)."); return; }
+
+    var prompt =
+      "Virtual try-on: dress the person from the first reference image in the " +
+      selectedGarment.desc + " from the second reference image. Keep the exact same " +
+      "face, pose, background and lighting. Change only the clothing, with realistic " +
+      "fabric folds and shadows. Photorealistic fashion photography.";
+
+    var url =
+      "https://gen.pollinations.ai/image/" + encodeURIComponent(prompt) +
+      "?model=nanobanana" +
+      "&image=" + encodeURIComponent(MODEL_PHOTO + "|" + SITE_BASE + selectedGarment.img) +
+      "&width=768&height=1024&nologo=true&private=true" +
+      "&seed=" + Math.floor(Math.random() * 2147483647) +
+      "&key=" + encodeURIComponent(key);
+
+    var btn = $("generateBtn");
+    btn.disabled = true;
+    btn.textContent = "Generating…";
+    $("afterActions").style.display = "none";
+    $("resultStage").innerHTML =
+      '<div class="placeholder"><div class="spinner"></div>' +
+      '<div class="status-line">Free AI is generating your try-on… (takes ~30–60s)</div></div>';
+
+    var img = new Image();
+    img.onload = function () {
+      $("resultStage").innerHTML =
+        '<span class="demo-badge">🆓 Free AI · live generated</span>' +
+        '<img class="out" src="' + url + '" alt="Free AI try-on — ' + selectedGarment.name + '" />';
+      // Download via fetch (Pollinations sends CORS *); fallback opens the image.
+      fetch(url)
+        .then(function (r) { if (!r.ok) throw new Error("dl"); return r.blob(); })
+        .then(function (b) {
+          var obj = URL.createObjectURL(b);
+          $("downloadBtn").href = obj;
+          $("downloadBtn").setAttribute("download", "tryon-" + selectedGarment.id + "-free.jpg");
+        })
+        .catch(function () {
+          $("downloadBtn").href = url;
+          $("downloadBtn").removeAttribute("download");
+          $("downloadBtn").target = "_blank";
+        });
+      $("afterActions").style.display = "flex";
+      $("selectionHint").textContent = "Freshly generated! Try another garment or hit “Try it on” again for a new variation.";
+      btn.disabled = false;
+      btn.textContent = "✨ Try it on";
+    };
+    img.onerror = function () {
+      btn.disabled = false;
+      btn.textContent = "✨ Try it on";
+      $("resultStage").innerHTML =
+        '<div class="placeholder" id="resultPlaceholder"><div class="big">👗</div><p>Your AI try-on will appear here.</p></div>';
+      showError("Free AI generation failed — check your Pollinations key (enter.pollinations.ai) and try again.");
+    };
+    img.src = url;
   }
 
   function generateLive() {
@@ -342,8 +424,17 @@
       hideError();
     });
 
+    $("saveFreeKey").addEventListener("click", function () {
+      var v = $("freeKey").value.trim();
+      if (!v) { showError("Paste your Pollinations API key first."); return; }
+      try { localStorage.setItem(FREE_KEY_STORAGE, v); } catch (e) {}
+      $("freeKeySaved").classList.add("show");
+      hideError();
+    });
+
     $("generateBtn").addEventListener("click", generate);
     $("modeDemo").addEventListener("click", function () { setMode("demo"); });
+    $("modeFree").addEventListener("click", function () { setMode("free"); });
     $("modeLive").addEventListener("click", function () { setMode("live"); });
     $("againBtn").addEventListener("click", function () {
       $("resultStage").innerHTML =

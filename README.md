@@ -23,10 +23,16 @@ Then open http://localhost:8000 — home page at `/`, the studio at `/studio.htm
 
 Nothing — the studio opens in **⚡ Instant demo** mode with pre-generated
 try-on previews for all 6 garments (`assets/pregen/tryon-*.jpg`), no key or
-upload needed. Switch to **🤖 Live AI** to try garments on your own photo:
-paste a **free Gemini API key** from [Google AI Studio](https://aistudio.google.com/apikey)
-in step 3 (saved only in your browser's localStorage, sent only to Google's
-API). Note: the key needs image-generation quota on its Google Cloud project —
+upload needed.
+
+**🆓 Free AI** generates a fresh try-on live on our model photo via
+[Pollinations](https://enter.pollinations.ai/keys) (free API key, no card).
+Paste the key in the studio — it's saved only in your browser's localStorage.
+
+**🤖 Live AI** tries garments on your own photo: paste a **free Gemini API
+key** from [Google AI Studio](https://aistudio.google.com/apikey) in step 3
+(saved only in your browser's localStorage, sent only to Google's API).
+Note: the key needs image-generation quota on its Google Cloud project —
 without it the API returns a 429 error.
 
 ## How it works

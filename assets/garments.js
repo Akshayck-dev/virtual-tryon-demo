@@ -5,6 +5,7 @@
 window.GARMENTS = [
   {
     id: "white-shirt",
+    desc: "classic white button-down shirt",
     name: "Classic White Shirt",
     category: "Shirts",
     price: "₹1,499",
@@ -13,6 +14,7 @@ window.GARMENTS = [
   },
   {
     id: "vintage-blue-shirt",
+    desc: "vintage blue button-down shirt",
     name: "Vintage Ivy Blue Shirt",
     category: "Shirts",
     price: "₹1,799",
@@ -21,6 +23,7 @@ window.GARMENTS = [
   },
   {
     id: "black-tee",
+    desc: "plain black crew-neck t-shirt",
     name: "Essential Black Tee",
     category: "T-Shirts",
     price: "₹799",
@@ -29,6 +32,7 @@ window.GARMENTS = [
   },
   {
     id: "brown-leather-jacket",
+    desc: "brown leather jacket, worn open over a dark top",
     name: "Brown Leather Jacket",
     category: "Jackets",
     price: "₹6,999",
@@ -37,6 +41,7 @@ window.GARMENTS = [
   },
   {
     id: "sage-hoodie",
+    desc: "sage green hoodie, hood down",
     name: "Sage Hoodie",
     category: "Hoodies",
     price: "₹1,999",
@@ -45,6 +50,7 @@ window.GARMENTS = [
   },
   {
     id: "blue-jeans",
+    desc: "classic blue jeans with a simple neutral top",
     name: "Classic Blue Jeans",
     category: "Denim",
     price: "₹2,499",
